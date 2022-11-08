@@ -22,6 +22,9 @@ int main(void) {
 
     print_list_with_addresses(head);
     print_list_with_addresses(head_copy);
+
+    free_list(head);
+    free_list(head_copy);
     return 0;
 }
 
@@ -48,7 +51,20 @@ struct node *insert(struct node *head, int data, int position) {
 }
 
 struct node *copy(struct node *list) {
-    return NULL;
+    struct node *copy_head = NULL;
+    struct node *copy_curr = NULL;
+    struct node *curr = list;
+    while (curr != NULL) {
+        struct node *clone = create_node(curr->data);
+        if (copy_head == NULL) {
+            copy_head = clone;
+        } else {
+            copy_curr->next = clone;
+        }
+        copy_curr = clone;
+        curr = curr->next;
+    }
+    return copy_head;
 }
 
 void print_list(struct node *head) {
@@ -76,4 +92,11 @@ struct node *create_node(int data) {
     return new_node;
 }
 
-void free_list(struct node *head) {}
+void free_list(struct node *head) {
+    struct node *curr = head;
+    while (curr != NULL) {
+        struct node *del_node = curr;
+        curr = curr->next;
+        free(del_node);
+    }
+}
